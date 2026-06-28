@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PixelFlake Games — Alex Nova</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --sky:    #c8e8f8;
+  --sky2:   #ddf0fc;
+  --snow:   #f0f8ff;
+  --snow2:  #e2f0fa;
+  --ice:    #b3d9f0;
+  --deep:   #2a4a6b;
+  --navy:   #1a3050;
+  --cozy:   #e87c3e;
+  --cozy2:  #f4a261;
+  --pine:   #2d6a4f;
+  --pine2:  #40916c;
+  --lilac:  #b8c0ff;
+  --rose:   #f4a0b0;
+  --yellow: #ffd166;
+  --card-bg:#ffffffcc;
+  --text:   #1e3a5f;
+  --muted:  #5a7a99;
+  --border: rgba(100,160,210,0.35);
+  --shadow: 0 4px 20px rgba(42,74,107,0.12);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--sky);
+  color: var(--text);
+  font-family: 'Nunito', sans-serif;
+  overflow-x: hidden;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.85rem 3rem;
+  background: rgba(200,232,248,0.88);
+  backdrop-filter: blur(16px);
+  border-bottom: 2px solid rgba(255,255,255,0.7);
+}
+
+.nav-logo {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.4rem; color: var(--deep);
+  display: flex; align-items: center; gap: 0.4rem;
+}
+.nav-logo .flake { color: var(--cozy); font-size: 1.6rem; }
+
+nav ul { list-style: none; display: flex; gap: 2rem; }
+nav ul li a {
+  text-decoration: none; color: var(--muted);
+  font-size: 0.9rem; font-weight: 700;
+  padding: 0.3rem 0.7rem; border-radius: 20px;
+  transition: all 0.2s;
+}
+nav ul li a:hover { background: rgba(255,255,255,0.6); color: var(--deep); }
+
+.nav-hire {
+  font-family: 'Fredoka One', cursive;
+  background: var(--cozy); color: #fff !important;
+  border-radius: 30px; padding: 0.4rem 1.3rem !important;
+  font-size: 1rem !important;
+  box-shadow: 0 3px 10px rgba(232,124,62,0.35);
+}
+.nav-hire:hover { background: var(--cozy2) !important; transform: scale(1.03); }
+
+/* ── SNOWFALL ── */
+.snow-canvas {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 1;
+}
+
+/* ── HERO ── */
+#hero {
+  min-height: 100vh;
+  position: relative;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  padding: 6rem 2rem 4rem;
+  overflow: hidden;
+  background: linear-gradient(180deg, #a8d8f0 0%, #c8e8f8 40%, #ddeeff 100%);
+}
+
+/* Mountains */
+.mountains {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 55%; z-index: 0; pointer-events: none;
+}
+
+/* Hero content */
+.hero-content { position: relative; z-index: 10; }
+
+.hero-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.75);
+  border: 2px solid rgba(255,255,255,0.9);
+  border-radius: 30px;
+  padding: 0.35rem 1.2rem;
+  font-size: 0.8rem; font-weight: 800;
+  color: var(--cozy);
+  letter-spacing: 0.08em; text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+
+.hero-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(2.8rem, 7vw, 5.5rem);
+  color: var(--deep);
+  line-height: 1.1;
+  text-shadow: 3px 4px 0 rgba(255,255,255,0.6);
+  margin-bottom: 0.4rem;
+}
+
+.hero-title .accent { color: var(--cozy); }
+
+.hero-sub-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(1.3rem, 3vw, 2rem);
+  color: var(--pine);
+  margin-bottom: 1.2rem;
+}
+
+.hero-desc {
+  font-size: 1.05rem; color: var(--deep);
+  max-width: 500px; margin: 0 auto 2rem;
+  line-height: 1.7; font-weight: 600;
+  background: rgba(255,255,255,0.55);
+  padding: 0.8rem 1.5rem; border-radius: 18px;
+}
+
+.hero-tags {
+  display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center;
+  margin-bottom: 2.2rem;
+}
+
+.tag {
+  background: rgba(255,255,255,0.65);
+  border: 2px solid rgba(255,255,255,0.9);
+  border-radius: 20px; padding: 0.3rem 0.9rem;
+  font-size: 0.78rem; font-weight: 800; color: var(--deep);
+}
+
+.hero-btns {
+  display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+  margin-bottom: 3rem;
+}
+
+.btn {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1rem; text-decoration: none;
+  padding: 0.75rem 2rem; border-radius: 40px;
+  border: none; cursor: pointer;
+  transition: all 0.25s; display: inline-block;
+}
+
+.btn-primary {
+  background: var(--cozy); color: #fff;
+  box-shadow: 0 5px 0 #c05c20, 0 8px 20px rgba(232,124,62,0.3);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 7px 0 #c05c20, 0 12px 25px rgba(232,124,62,0.4); }
+.btn-primary:active { transform: translateY(2px); box-shadow: 0 2px 0 #c05c20; }
+
+.btn-secondary {
+  background: rgba(255,255,255,0.75); color: var(--deep);
+  border: 2.5px solid rgba(255,255,255,0.95);
+  box-shadow: 0 5px 0 rgba(100,160,210,0.3);
+}
+.btn-secondary:hover { background: #fff; transform: translateY(-2px); }
+
+.hero-stats {
+  display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;
+}
+
+.stat {
+  background: rgba(255,255,255,0.65);
+  border: 2px solid rgba(255,255,255,0.9);
+  border-radius: 18px; padding: 0.75rem 1.5rem;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.stat-num {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.8rem; color: var(--cozy);
+  line-height: 1;
+}
+.stat-label { font-size: 0.7rem; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+
+.snowman {
+  position: absolute; bottom: 30%; right: 8%;
+  font-size: 5rem; z-index: 5;
+  animation: bobble 3s ease-in-out infinite;
+}
+.penguin {
+  position: absolute; bottom: 28%; left: 7%;
+  font-size: 3.5rem; z-index: 5;
+  animation: bobble 2.5s ease-in-out infinite 0.5s;
+}
+@keyframes bobble { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+.scroll-hint {
+  position: absolute; bottom: 1.5rem;
+  display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+  color: var(--muted); font-size: 0.7rem; font-weight: 800;
+  letter-spacing: 0.1em; text-transform: uppercase; z-index: 10;
+}
+.scroll-arrow { animation: bounce 1.6s ease-in-out infinite; }
+@keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
+
+/* ── SECTION COMMONS ── */
+section { padding: 5rem 2rem; position: relative; }
+.container { max-width: 1150px; margin: 0 auto; }
+
+.section-eyebrow {
+  font-size: 0.72rem; font-weight: 800; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--cozy); margin-bottom: 0.4rem;
+}
+
+.section-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  color: var(--deep); line-height: 1.2; margin-bottom: 0.75rem;
+}
+.section-title .accent { color: var(--pine); }
+.section-desc { color: var(--muted); font-size: 0.97rem; line-height: 1.7; font-weight: 600; max-width: 520px; }
+.section-header { margin-bottom: 3rem; }
+
+/* cloud-shaped divider */
+.wave-divider { width: 100%; overflow: hidden; line-height: 0; }
+.wave-divider svg { display: block; }
+
+/* ── GAMES ── */
+#games { background: #e8f4fd; }
+
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 1.5rem;
+}
+
+.game-card {
+  background: var(--card-bg);
+  border: 2.5px solid rgba(255,255,255,0.9);
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s, box-shadow 0.3s;
+  backdrop-filter: blur(8px);
+}
+.game-card:hover {
+  transform: translateY(-6px) rotate(-0.5deg);
+  box-shadow: 0 12px 40px rgba(42,74,107,0.18);
+}
+
+.game-cover {
+  width: 100%; aspect-ratio: 16/9;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 4.5rem; position: relative;
+}
+
+.game-badge {
+  position: absolute; top: 0.7rem; right: 0.7rem;
+  font-family: 'Fredoka One', cursive;
+  font-size: 0.75rem; padding: 0.25rem 0.85rem;
+  border-radius: 20px; color: #fff;
+}
+.badge-new  { background: #e63946; }
+.badge-hot  { background: var(--cozy); }
+.badge-free { background: var(--pine); }
+
+.game-body { padding: 1.2rem 1.4rem 1.5rem; }
+
+.game-genre {
+  font-size: 0.68rem; font-weight: 800; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--pine); margin-bottom: 0.25rem;
+}
+
+.game-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.25rem; color: var(--deep); margin-bottom: 0.4rem;
+}
+
+.game-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.6; font-weight: 600; margin-bottom: 0.85rem; }
+
+.game-meta {
+  display: flex; align-items: center; gap: 0.75rem;
+  font-size: 0.72rem; font-weight: 700; color: var(--muted);
+  margin-bottom: 1rem; flex-wrap: wrap;
+}
+.game-stars { color: #f9a825; }
+
+.platforms { display: flex; gap: 0.35rem; }
+.plat {
+  background: var(--snow2); border: 1.5px solid var(--ice);
+  border-radius: 8px; padding: 0.18rem 0.5rem; font-size: 0.65rem; font-weight: 800; color: var(--deep);
+}
+
+.game-actions { display: flex; gap: 0.65rem; }
+
+.dl-btn {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: 0.35rem;
+  font-family: 'Fredoka One', cursive; font-size: 0.88rem;
+  padding: 0.55rem 0.85rem; border-radius: 14px;
+  text-decoration: none; cursor: pointer; border: none;
+  transition: all 0.2s;
+}
+.dl-primary { background: var(--cozy); color: #fff; box-shadow: 0 3px 0 #c05c20; }
+.dl-primary:hover { transform: translateY(-1px); }
+.dl-secondary {
+  background: rgba(240,248,255,0.8); color: var(--deep);
+  border: 2px solid var(--ice);
+}
+.dl-secondary:hover { background: #fff; border-color: var(--cozy2); color: var(--cozy); }
+
+/* ── VIDEOS ── */
+#videos { background: #d6ecf8; }
+
+.videos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.video-card {
+  background: var(--card-bg);
+  border: 2.5px solid rgba(255,255,255,0.9);
+  border-radius: 20px; overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s;
+}
+.video-card:hover { transform: translateY(-5px) rotate(0.4deg); }
+
+.video-thumb {
+  width: 100%; aspect-ratio: 16/9;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 3rem; position: relative; cursor: pointer;
+}
+
+.play-btn {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 48px; height: 48px; border-radius: 50%;
+  background: rgba(255,255,255,0.9);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem; color: var(--cozy);
+  border: 3px solid rgba(255,255,255,0.6);
+  transition: transform 0.2s, background 0.2s;
+  pointer-events: none;
+}
+.video-thumb:hover .play-btn { transform: translate(-50%,-50%) scale(1.15); background: var(--cozy); color: #fff; }
+
+.video-dur {
+  position: absolute; bottom: 0.5rem; right: 0.6rem;
+  background: rgba(30,58,95,0.8); color: #fff;
+  font-size: 0.68rem; font-weight: 700;
+  padding: 0.15rem 0.45rem; border-radius: 7px;
+}
+
+.video-info { padding: 0.9rem 1.1rem 1.1rem; }
+.video-tag { font-size: 0.65rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--pine); margin-bottom: 0.2rem; }
+.video-title { font-family: 'Fredoka One', cursive; font-size: 0.95rem; color: var(--deep); line-height: 1.35; margin-bottom: 0.35rem; }
+.video-meta { font-size: 0.7rem; font-weight: 700; color: var(--muted); }
+
+.yt-cta { text-align: center; margin-top: 2.5rem; }
+.yt-btn {
+  display: inline-flex; align-items: center; gap: 0.7rem;
+  font-family: 'Fredoka One', cursive; font-size: 1rem;
+  padding: 0.85rem 2.2rem; border-radius: 40px;
+  text-decoration: none; color: #fff;
+  background: #e63946;
+  box-shadow: 0 5px 0 #a81c27, 0 8px 25px rgba(230,57,70,0.3);
+  transition: all 0.2s;
+}
+.yt-btn:hover { transform: translateY(-2px); box-shadow: 0 7px 0 #a81c27, 0 12px 30px rgba(230,57,70,0.4); }
+
+/* ── NEWS ── */
+#news { background: #e2f2fa; }
+
+.news-grid {
+  display: grid; grid-template-columns: 5fr 3fr; gap: 1.5rem;
+}
+@media (max-width: 800px) { .news-grid { grid-template-columns: 1fr; } }
+
+.news-featured {
+  background: var(--card-bg);
+  border: 2.5px solid rgba(255,255,255,0.9);
+  border-radius: 22px; overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.news-featured-img {
+  width: 100%; aspect-ratio: 16/7;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 5rem;
+}
+
+.news-body { padding: 1.6rem; }
+.news-cat { font-size: 0.68rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: var(--cozy); margin-bottom: 0.4rem; }
+.news-title { font-family: 'Fredoka One', cursive; font-size: 1.35rem; color: var(--deep); line-height: 1.3; margin-bottom: 0.6rem; }
+.news-excerpt { font-size: 0.9rem; color: var(--muted); line-height: 1.7; font-weight: 600; margin-bottom: 1rem; }
+.news-date { font-size: 0.72rem; font-weight: 800; color: var(--muted); display: flex; align-items: center; gap: 0.4rem; }
+.news-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ice); }
+
+.news-sidebar { display: flex; flex-direction: column; gap: 1rem; }
+
+.news-card {
+  background: var(--card-bg);
+  border: 2.5px solid rgba(255,255,255,0.9);
+  border-radius: 18px; padding: 1.1rem 1.25rem;
+  box-shadow: var(--shadow); cursor: pointer;
+  transition: transform 0.2s;
+}
+.news-card:hover { transform: translateX(4px); }
+.news-card .news-cat { margin-bottom: 0.25rem; }
+.news-card-title { font-family: 'Fredoka One', cursive; font-size: 0.95rem; color: var(--deep); line-height: 1.35; margin-bottom: 0.3rem; }
+.news-card-date { font-size: 0.68rem; font-weight: 700; color: var(--muted); }
+
+/* ── ABOUT / SKILLS ── */
+#about { background: #eaf5fb; }
+
+.about-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+@media (max-width: 760px) { .about-wrap { grid-template-columns: 1fr; } }
+
+.avatar-area { text-align: center; margin-bottom: 1.5rem; }
+.avatar {
+  width: 100px; height: 100px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--lilac), var(--ice));
+  border: 4px solid rgba(255,255,255,0.9);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 3.2rem; box-shadow: var(--shadow);
+  margin-bottom: 0.75rem;
+}
+.about-name { font-family: 'Fredoka One', cursive; font-size: 1.4rem; color: var(--deep); }
+.about-role { font-size: 0.85rem; font-weight: 700; color: var(--muted); }
+
+.about-bio { font-size: 0.9rem; color: var(--muted); font-weight: 600; line-height: 1.8; }
+.about-bio p + p { margin-top: 0.85rem; }
+
+.skills-list { display: flex; flex-direction: column; gap: 1rem; }
+.skill-row { }
+.skill-top { display: flex; justify-content: space-between; font-size: 0.82rem; font-weight: 800; color: var(--deep); margin-bottom: 0.45rem; }
+.skill-top span:last-child { color: var(--muted); }
+.skill-track {
+  height: 10px; background: var(--snow2);
+  border: 1.5px solid var(--ice); border-radius: 10px; overflow: hidden;
+}
+.skill-fill {
+  height: 100%; border-radius: 10px;
+  background: linear-gradient(90deg, var(--cozy2), var(--cozy));
+  width: 0; transition: width 1.4s cubic-bezier(.22,1,.36,1);
+}
+
+/* ── CONTACT ── */
+#contact { background: #d6ecf8; }
+
+.contact-inner {
+  max-width: 620px; margin: 0 auto; text-align: center;
+}
+
+.contact-card {
+  background: var(--card-bg);
+  border: 2.5px solid rgba(255,255,255,0.9);
+  border-radius: 28px; padding: 3rem 2.5rem;
+  box-shadow: var(--shadow);
+}
+
+.contact-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+.contact-title { font-family: 'Fredoka One', cursive; font-size: 1.7rem; color: var(--deep); margin-bottom: 0.7rem; }
+.contact-desc { font-size: 0.95rem; color: var(--muted); font-weight: 600; line-height: 1.7; margin-bottom: 2rem; }
+
+.contact-links { display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center; }
+.contact-link {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-family: 'Fredoka One', cursive; font-size: 0.9rem;
+  padding: 0.6rem 1.3rem; border-radius: 16px;
+  text-decoration: none; color: var(--deep);
+  background: var(--snow); border: 2px solid var(--ice);
+  transition: all 0.2s; font-weight: 400;
+}
+.contact-link:hover { background: var(--cozy); color: #fff; border-color: var(--cozy); transform: translateY(-2px); }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--deep);
+  padding: 2rem 3rem;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 1rem;
+  position: relative; overflow: hidden;
+}
+footer::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 6px;
+  background: linear-gradient(90deg, var(--cozy), var(--rose), var(--lilac), var(--ice));
+}
+
+.footer-logo { font-family: 'Fredoka One', cursive; font-size: 1.2rem; color: #fff; }
+.footer-logo span { color: var(--cozy2); }
+
+.footer-links { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+.footer-links a { font-size: 0.82rem; font-weight: 700; color: rgba(255,255,255,0.5); text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: rgba(255,255,255,0.9); }
+
+.footer-copy { font-size: 0.72rem; font-weight: 700; color: rgba(255,255,255,0.3); }
+
+/* ── REVEAL ── */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.65s ease, transform 0.65s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+
+/* ── MOBILE ── */
+@media (max-width: 640px) {
+  nav { padding: 0.85rem 1.2rem; }
+  nav ul { display: none; }
+  section { padding: 3.5rem 1.2rem; }
+  footer { flex-direction: column; text-align: center; }
+  .hero-stats { gap: 0.75rem; }
+  .stat { padding: 0.6rem 1rem; }
+  .contact-card { padding: 2rem 1.4rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo"><span class="flake">❄</span> PixelFlake</div>
+  <ul>
+    <li><a href="#games">Games</a></li>
+    <li><a href="#videos">Videos</a></li>
+    <li><a href="#news">News</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact" class="nav-hire">Hire Me ✉️</a></li>
+  </ul>
+</nav>
+
+<!-- SNOW CANVAS -->
+<canvas class="snow-canvas" id="snowCanvas"></canvas>
+
+<!-- HERO -->
+<section id="hero">
+  <!-- SVG mountains + snow ground -->
+  <div class="mountains">
+    <svg viewBox="0 0 1440 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="width:100%;height:100%;display:block;">
+      <!-- far mountains -->
+      <polygon points="0,400 0,260 120,160 240,240 360,120 480,200 600,80 720,170 840,90 960,180 1080,100 1200,190 1320,130 1440,200 1440,400" fill="#b8d8ee" opacity="0.7"/>
+      <!-- mid mountains -->
+      <polygon points="0,400 0,320 80,230 180,290 300,190 430,270 560,170 680,250 800,160 920,240 1060,170 1180,240 1320,180 1440,230 1440,400" fill="#a2ccdf"/>
+      <!-- snow caps -->
+      <polygon points="120,160 100,195 140,195" fill="#f0f8ff"/>
+      <polygon points="360,120 335,165 385,165" fill="#f0f8ff"/>
+      <polygon points="600,80 570,130 630,130" fill="#f0f8ff"/>
+      <polygon points="840,90 812,140 868,140" fill="#f0f8ff"/>
+      <polygon points="1080,100 1055,148 1105,148" fill="#f0f8ff"/>
+      <!-- pine trees left -->
+      <polygon points="60,380 75,310 90,380" fill="#2d6a4f"/>
+      <polygon points="40,380 55,320 70,380" fill="#40916c"/>
+      <!-- pine trees right -->
+      <polygon points="1350,380 1365,320 1380,380" fill="#2d6a4f"/>
+      <polygon points="1370,380 1390,310 1410,380" fill="#40916c"/>
+      <!-- snow ground -->
+      <ellipse cx="720" cy="410" rx="900" ry="60" fill="#ddeeff"/>
+      <rect x="0" y="380" width="1440" height="40" fill="#e8f4fd"/>
+    </svg>
+  </div>
+
+  <div class="snowman">⛄</div>
+  <div class="penguin">🐧</div>
+
+  <div class="hero-content">
+    <div class="hero-badge">❄️ Indie Game Developer Portfolio</div>
+    <h1 class="hero-title">ALEX <span class="accent">NOVA</span></h1>
+    <p class="hero-sub-title">🎮 Making Games That Spark Wonder</p>
+    <p class="hero-desc">Crafting cozy adventures, pixel worlds, and snowy realms — one carefully placed sprite at a time.</p>
+
+    <div class="hero-tags">
+      <span class="tag">🎯 Unity</span>
+      <span class="tag">🚀 Unreal 5</span>
+      <span class="tag">🌿 Godot</span>
+      <span class="tag">🎨 Pixel Art</span>
+      <span class="tag">🔊 Sound Design</span>
+      <span class="tag">📐 Level Design</span>
+    </div>
+
+    <div class="hero-btns">
+      <a href="#games" class="btn btn-primary">🎮 View My Games</a>
+      <a href="#contact" class="btn btn-secondary">💌 Get in Touch</a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">12</div><div class="stat-label">Games</div></div>
+      <div class="stat"><div class="stat-num">340K</div><div class="stat-label">Downloads</div></div>
+      <div class="stat"><div class="stat-num">4.8⭐</div><div class="stat-label">Avg. Rating</div></div>
+      <div class="stat"><div class="stat-num">6 yrs</div><div class="stat-label">Experience</div></div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Scroll down</span>
+    <span class="scroll-arrow">❄️</span>
+  </div>
+</section>
+
+<!-- wave -->
+<div class="wave-divider">
+  <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block;height:50px;">
+    <path d="M0,30 C240,60 480,0 720,30 C960,60 1200,0 1440,30 L1440,60 L0,60 Z" fill="#e8f4fd"/>
+  </svg>
+</div>
+
+<!-- GAMES -->
+<section id="games">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="section-eyebrow">⛄ Fresh from the Workshop</p>
+      <h2 class="section-title">Latest <span class="accent">Games</span></h2>
+      <p class="section-desc">Handcrafted with love — from dark snowy dungeons to cozy pixel platformers. Pick your adventure!</p>
+    </div>
+
+    <div class="games-grid">
+
+      <div class="game-card reveal">
+        <div class="game-cover" style="background:linear-gradient(135deg,#1a1a3e,#2d3561);">
+          🌌
+          <span class="game-badge badge-new">✨ New</span>
+        </div>
+        <div class="game-body">
+          <p class="game-genre">Action RPG</p>
+          <h3 class="game-title">Void Sovereign</h3>
+          <p class="game-desc">Battle gods across fractured dimensions in this dark-fantasy action RPG with brutal combo mechanics.</p>
+          <div class="game-meta">
+            <span class="game-stars">★★★★★</span><span>4.9</span>
+            <div class="platforms"><span class="plat">WIN</span><span class="plat">LIN</span></div>
+            <span>May 2025</span>
+          </div>
+          <div class="game-actions">
+            <a href="#" class="dl-btn dl-primary">⬇️ Download</a>
+            <a href="#" class="dl-btn dl-secondary">🎮 Steam</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="game-card reveal">
+        <div class="game-cover" style="background:linear-gradient(135deg,#001a35,#0a3d6b);">
+          🚀
+          <span class="game-badge badge-hot">🔥 Hot</span>
+        </div>
+        <div class="game-body">
+          <p class="game-genre">Sci-Fi Shooter</p>
+          <h3 class="game-title">Neon Breach</h3>
+          <p class="game-desc">High-octane cyberpunk shooter — fight through 40 floors of a corporate megastructure with hacking mechanics.</p>
+          <div class="game-meta">
+            <span class="game-stars">★★★★★</span><span>4.8</span>
+            <div class="platforms"><span class="plat">WIN</span><span class="plat">MAC</span></div>
+            <span>Feb 2025</span>
+          </div>
+          <div class="game-actions">
+            <a href="#" class="dl-btn dl-primary">⬇️ Download</a>
+            <a href="#" class="dl-btn dl-secondary">🎯 itch.io</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="game-card reveal">
+        <div class="game-cover" style="background:linear-gradient(135deg,#0a1e10,#163a20);">
+          🌿
+          <span class="game-badge badge-free">🎁 Free</span>
+        </div>
+        <div class="game-body">
+          <p class="game-genre">Survival Horror</p>
+          <h3 class="game-title">Root Hollow</h3>
+          <p class="game-desc">Survive a cursed forest that shifts each night. Procedurally generated terror — no two runs the same.</p>
+          <div class="game-meta">
+            <span class="game-stars">★★★★☆</span><span>4.6</span>
+            <div class="platforms"><span class="plat">WIN</span><span class="plat">LIN</span><span class="plat">MAC</span></div>
+            <span>Nov 2024</span>
+          </div>
+          <div class="game-actions">
+            <a href="#" class="dl-btn dl-primary">⬇️ Free Download</a>
+            <a href="#" class="dl-btn dl-secondary">🎯 itch.io</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="game-card reveal">
+        <div class="game-cover" style="background:linear-gradient(135deg,#2a0a00,#5c1c00);">
+          🔥
+        </div>
+        <div class="game-body">
+          <p class="game-genre">Roguelite</p>
+          <h3 class="game-title">Ember Run</h3>
+          <p class="game-desc">Frantic roguelite — build fire decks and burn through 100 hand-crafted dungeon rooms.</p>
+          <div class="game-meta">
+            <span class="game-stars">★★★★★</span><span>4.7</span>
+            <div class="platforms"><span class="plat">WIN</span></div>
+            <span>Aug 2024</span>
+          </div>
+          <div class="game-actions">
+            <a href="#" class="dl-btn dl-primary">⬇️ Download</a>
+            <a href="#" class="dl-btn dl-secondary">🎮 Steam</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="game-card reveal">
+        <div class="game-cover" style="background:linear-gradient(135deg,#001428,#002b50);">
+          🌊
+        </div>
+        <div class="game-body">
+          <p class="game-genre">Puzzle Adventure</p>
+          <h3 class="game-title">Depth Protocol</h3>
+          <p class="game-desc">Explore an alien ocean solving physics-based puzzles aboard a broken submarine. Hauntingly beautiful.</p>
+          <div class="game-meta">
+            <span class="game-stars">★★★★☆</span><span>4.5</span>
+            <div class="platforms"><span class="plat">WIN</span><span class="plat">MAC</span></div>
+            <span>Jun 2024</span>
+          </div>
+          <div class="game-actions">
+            <a href="#" class="dl-btn dl-primary">⬇️ Download</a>
+            <a href="#" class="dl-btn dl-secondary">🎯 itch.io</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="game-card reveal">
+        <div class="game-cover" style="background:linear-gradient(135deg,#1a0030,#3d0060);">
+          👾
+          <span class="game-badge badge-free">🎁 Free</span>
+        </div>
+        <div class="game-body">
+          <p class="game-genre">Pixel Platformer</p>
+          <h3 class="game-title">Pixelbound</h3>
+          <p class="game-desc">Retro-style platformer with 8 worlds, secret paths, and a boss rush mode. Lovingly hand-drawn in 16-bit.</p>
+          <div class="game-meta">
+            <span class="game-stars">★★★★★</span><span>4.9</span>
+            <div class="platforms"><span class="plat">WIN</span><span class="plat">LIN</span><span class="plat">MAC</span></div>
+            <span>Mar 2024</span>
+          </div>
+          <div class="game-actions">
+            <a href="#" class="dl-btn dl-primary">⬇️ Free Download</a>
+            <a href="#" class="dl-btn dl-secondary">🎮 Steam</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="wave-divider">
+  <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block;height:50px;">
+    <path d="M0,20 C360,60 720,0 1080,40 C1260,60 1380,20 1440,30 L1440,0 L0,0 Z" fill="#e8f4fd"/>
+    <path d="M0,20 C360,60 720,0 1080,40 C1260,60 1380,20 1440,30 L1440,60 L0,60 Z" fill="#d6ecf8"/>
+  </svg>
+</div>
+
+<!-- VIDEOS -->
+<section id="videos">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="section-eyebrow">🎬 Watch the Magic</p>
+      <h2 class="section-title">Gameplay <span class="accent">Videos</span></h2>
+      <p class="section-desc">Full walkthroughs, trailers, dev logs, and world records — all waiting on YouTube.</p>
+    </div>
+
+    <div class="videos-grid">
+
+      <div class="video-card reveal">
+        <div class="video-thumb" style="background:linear-gradient(135deg,#1a1a3e,#2d3561);" onclick="window.open('https://www.youtube.com/@', '_blank')">
+          🌌<div class="play-btn">▶</div><span class="video-dur">18:42</span>
+        </div>
+        <div class="video-info">
+          <p class="video-tag">Void Sovereign</p>
+          <p class="video-title">Full Boss Rush — All 12 Bosses</p>
+          <p class="video-meta">247K views · 3 weeks ago</p>
+        </div>
+      </div>
+
+      <div class="video-card reveal">
+        <div class="video-thumb" style="background:linear-gradient(135deg,#001a35,#0a3d6b);" onclick="window.open('https://www.youtube.com/@', '_blank')">
+          🚀<div class="play-btn">▶</div><span class="video-dur">12:05</span>
+        </div>
+        <div class="video-info">
+          <p class="video-tag">Neon Breach</p>
+          <p class="video-title">Official Launch Trailer + Gameplay Reveal</p>
+          <p class="video-meta">512K views · 4 months ago</p>
+        </div>
+      </div>
+
+      <div class="video-card reveal">
+        <div class="video-thumb" style="background:linear-gradient(135deg,#0a1e10,#163a20);" onclick="window.open('https://www.youtube.com/@', '_blank')">
+          🌿<div class="play-btn">▶</div><span class="video-dur">9:17</span>
+        </div>
+        <div class="video-info">
+          <p class="video-tag">Root Hollow</p>
+          <p class="video-title">Survival Guide — How Far Can You Get?</p>
+          <p class="video-meta">189K views · 7 months ago</p>
+        </div>
+      </div>
+
+      <div class="video-card reveal">
+        <div class="video-thumb" style="background:linear-gradient(135deg,#2a0a00,#5c1c00);" onclick="window.open('https://www.youtube.com/@', '_blank')">
+          🔥<div class="play-btn">▶</div><span class="video-dur">22:38</span>
+        </div>
+        <div class="video-info">
+          <p class="video-tag">Ember Run</p>
+          <p class="video-title">World Record Speed Run — 14:22 Clear</p>
+          <p class="video-meta">88K views · 10 months ago</p>
+        </div>
+      </div>
+
+      <div class="video-card reveal">
+        <div class="video-thumb" style="background:linear-gradient(135deg,#001428,#002b50);" onclick="window.open('https://www.youtube.com/@', '_blank')">
+          🌊<div class="play-btn">▶</div><span class="video-dur">7:54</span>
+        </div>
+        <div class="video-info">
+          <p class="video-tag">Depth Protocol</p>
+          <p class="video-title">Atmosphere Showcase + Puzzle Solutions</p>
+          <p class="video-meta">134K views · 1 year ago</p>
+        </div>
+      </div>
+
+      <div class="video-card reveal">
+        <div class="video-thumb" style="background:linear-gradient(135deg,#1a0f00,#3d2800);" onclick="window.open('https://www.youtube.com/@', '_blank')">
+          🎬<div class="play-btn">▶</div><span class="video-dur">35:00</span>
+        </div>
+        <div class="video-info">
+          <p class="video-tag">Dev Log</p>
+          <p class="video-title">How I Built 6 Games in 6 Years — Full Story</p>
+          <p class="video-meta">301K views · 2 years ago</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="yt-cta reveal">
+      <a href="https://www.youtube.com/@" target="_blank" class="yt-btn">
+        ▶ Subscribe on YouTube — 84K Subscribers
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="wave-divider">
+  <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block;height:50px;">
+    <path d="M0,40 C480,0 960,60 1440,20 L1440,0 L0,0 Z" fill="#d6ecf8"/>
+    <path d="M0,40 C480,0 960,60 1440,20 L1440,60 L0,60 Z" fill="#e2f2fa"/>
+  </svg>
+</div>
+
+<!-- NEWS -->
+<section id="news">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="section-eyebrow">📰 Hot off the Press</p>
+      <h2 class="section-title">Dev <span class="accent">News</span></h2>
+      <p class="section-desc">Announcements, patch notes, game jam recaps, and what's coming next.</p>
+    </div>
+
+    <div class="news-grid">
+      <div class="news-featured reveal">
+        <div class="news-featured-img" style="background:linear-gradient(135deg,#c8e8f8,#e2f2fa);">🏆</div>
+        <div class="news-body">
+          <p class="news-cat">🏅 Announcement</p>
+          <h3 class="news-title">Void Sovereign Wins Best Indie RPG at the 2025 Indie Games Summit!</h3>
+          <p class="news-excerpt">After six months of development and hundreds of playtester hours, Void Sovereign took home the top award in the RPG category at this year's Indie Games Summit in Seattle. This recognition means the world…</p>
+          <div class="news-date"><span class="news-dot"></span><span>Alex Nova · June 10, 2025</span></div>
+        </div>
+      </div>
+
+      <div class="news-sidebar">
+        <div class="news-card reveal">
+          <p class="news-cat">🔧 Patch Notes</p>
+          <p class="news-card-title">Neon Breach v2.3 — New Hacking Tree & Performance Fixes</p>
+          <p class="news-card-date">June 18, 2025 · 3 min read</p>
+        </div>
+        <div class="news-card reveal">
+          <p class="news-cat">🛠️ Dev Log</p>
+          <p class="news-card-title">Progress Report: Unnamed Space Survival — First Alpha Screenshots</p>
+          <p class="news-card-date">June 5, 2025 · 5 min read</p>
+        </div>
+        <div class="news-card reveal">
+          <p class="news-cat">🎮 Game Jam</p>
+          <p class="news-card-title">Our Ludum Dare 57 Entry: Made a Horror Puzzle in 48 Hours</p>
+          <p class="news-card-date">May 28, 2025 · 4 min read</p>
+        </div>
+        <div class="news-card reveal">
+          <p class="news-cat">🌍 Community</p>
+          <p class="news-card-title">Root Hollow Modding Toolkit Is Now Open Source on GitHub</p>
+          <p class="news-card-date">May 12, 2025 · 2 min read</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wave-divider">
+  <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block;height:50px;">
+    <path d="M0,20 C360,55 720,5 1080,45 C1260,65 1380,15 1440,30 L1440,0 L0,0 Z" fill="#e2f2fa"/>
+    <path d="M0,20 C360,55 720,5 1080,45 C1260,65 1380,15 1440,30 L1440,60 L0,60 Z" fill="#eaf5fb"/>
+  </svg>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="about-wrap">
+      <div class="reveal">
+        <div class="avatar-area">
+          <div class="avatar">🧑‍💻</div>
+          <p class="about-name">Alex Nova</p>
+          <p class="about-role">Solo Indie Game Developer · Berlin, Germany</p>
+        </div>
+        <div class="about-bio">
+          <p>Hey there! I'm Alex — a solo indie developer who's been building games professionally since 2019 (and making terrible little prototypes since I was 12).</p>
+          <p>I specialize in atmospheric games with deep mechanical systems. Each project starts with one weird mechanic I can't stop thinking about — then I build a whole world around it.</p>
+          <p>I handle everything: design, code, art direction, and soundtrack. Currently building an unannounced open-world survival game in a snowy world — naturally! ❄️</p>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <p class="section-eyebrow" style="margin-bottom:1.2rem;">🛠️ Skills & Tools</p>
+        <div class="skills-list">
+          <div class="skill-row"><div class="skill-top"><span>Unity / C#</span><span>96%</span></div><div class="skill-track"><div class="skill-fill" data-w="96"></div></div></div>
+          <div class="skill-row"><div class="skill-top"><span>Unreal Engine 5</span><span>82%</span></div><div class="skill-track"><div class="skill-fill" data-w="82"></div></div></div>
+          <div class="skill-row"><div class="skill-top"><span>Godot / GDScript</span><span>78%</span></div><div class="skill-track"><div class="skill-fill" data-w="78"></div></div></div>
+          <div class="skill-row"><div class="skill-top"><span>Pixel Art / 2D</span><span>91%</span></div><div class="skill-track"><div class="skill-fill" data-w="91"></div></div></div>
+          <div class="skill-row"><div class="skill-top"><span>3D Modeling (Blender)</span><span>74%</span></div><div class="skill-track"><div class="skill-fill" data-w="74"></div></div></div>
+          <div class="skill-row"><div class="skill-top"><span>Level Design</span><span>88%</span></div><div class="skill-track"><div class="skill-fill" data-w="88"></div></div></div>
+          <div class="skill-row"><div class="skill-top"><span>Game Sound Design</span><span>68%</span></div><div class="skill-track"><div class="skill-fill" data-w="68"></div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wave-divider">
+  <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block;height:50px;">
+    <path d="M0,30 C480,60 960,0 1440,35 L1440,0 L0,0 Z" fill="#eaf5fb"/>
+    <path d="M0,30 C480,60 960,0 1440,35 L1440,60 L0,60 Z" fill="#d6ecf8"/>
+  </svg>
+</div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-inner reveal">
+      <div class="contact-card">
+        <div class="contact-icon">📡</div>
+        <h2 class="contact-title">Let's Build Something Together!</h2>
+        <p class="contact-desc">Up for collaboration, game licensing, or just wanna chat about mechanics? I reply to everything — don't be shy! 🙂</p>
+        <div class="contact-links">
+          <a href="mailto:hello@pixelflake.dev" class="contact-link">✉️ Email</a>
+          <a href="https://twitter.com" target="_blank" class="contact-link">𝕏 Twitter</a>
+          <a href="https://github.com" target="_blank" class="contact-link">🐙 GitHub</a>
+          <a href="https://discord.gg" target="_blank" class="contact-link">💬 Discord</a>
+          <a href="https://itch.io" target="_blank" class="contact-link">🎮 itch.io</a>
+          <a href="https://store.steampowered.com" target="_blank" class="contact-link">🎮 Steam</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">❄️ Pixel<span>Flake</span></div>
+  <div class="footer-links">
+    <a href="#games">Games</a>
+    <a href="#videos">Videos</a>
+    <a href="#news">News</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+    <a href="#">Press Kit</a>
+  </div>
+  <p class="footer-copy">© 2025 Alex Nova · PixelFlake Games ❄️</p>
+</footer>
+
+<script>
+// ── Snowfall ──
+const canvas = document.getElementById('snowCanvas');
+const ctx = canvas.getContext('2d');
+
+function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+resize();
+window.addEventListener('resize', resize);
+
+const flakes = Array.from({length: 120}, () => ({
+  x: Math.random() * window.innerWidth,
+  y: Math.random() * window.innerHeight,
+  r: Math.random() * 4 + 1.5,
+  speed: Math.random() * 1.2 + 0.4,
+  drift: Math.random() * 0.6 - 0.3,
+  opacity: Math.random() * 0.55 + 0.2,
+  wobble: Math.random() * Math.PI * 2
+}));
+
+function drawSnow() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  flakes.forEach(f => {
+    ctx.beginPath();
+    ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,255,255,${f.opacity})`;
+    ctx.fill();
+    f.y += f.speed;
+    f.wobble += 0.02;
+    f.x += f.drift + Math.sin(f.wobble) * 0.4;
+    if (f.y > canvas.height + 10) { f.y = -10; f.x = Math.random() * canvas.width; }
+    if (f.x > canvas.width + 10) f.x = -10;
+    if (f.x < -10) f.x = canvas.width + 10;
+  });
+  requestAnimationFrame(drawSnow);
+}
+drawSnow();
+
+// ── Scroll Reveal ──
+const reveals = document.querySelectorAll('.reveal');
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 70);
+      obs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+reveals.forEach(el => obs.observe(el));
+
+// ── Skill bars ──
+const skillObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const w = e.target.getAttribute('data-w');
+      e.target.style.width = w + '%';
+      skillObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.skill-fill').forEach(el => skillObs.observe(el));
+
+// ── Active nav highlight ──
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('nav ul li a:not(.nav-hire)');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 140) current = s.id; });
+  navLinks.forEach(a => {
+    const isActive = a.getAttribute('href') === '#' + current;
+    a.style.background = isActive ? 'rgba(255,255,255,0.6)' : '';
+    a.style.color = isActive ? 'var(--deep)' : '';
+  });
+});
+</script>
+</body>
+</html>
